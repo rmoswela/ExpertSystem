@@ -27,6 +27,7 @@ function searchLogical($exp)
 			if ($key == $token[$loop])
 			{
 				 $expression = [$token[$loop - 1], $value, $token[$loop + 1]];
+				 exit(0);
 			}
 		}
 	}
