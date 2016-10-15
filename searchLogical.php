@@ -26,8 +26,26 @@ function searchLogical($exp)
 		{
 			if ($key == $token[$loop])
 			{
-				 $expression = [$token[$loop - 1], $value, $token[$loop + 1]];
-				 exit(0);
+				if ($key == "+")
+				{
+				   	$expression = [$token[$loop - 1], $value, $token[$loop + 1]];
+					logicalAnd($expression);
+				}
+				else if ($key == "|")
+				{
+					$expression = [$token[$loop - 1], $value, $token[$loop + 1]];
+					logicalOr($expression)
+				}
+				else if ($key == "^")
+				{
+				 	$expression = [$token[$loop - 1], $value, $token[$loop + 1]];
+					logicalAnd($expression)
+				}
+				else if ($key == "=>")
+				{
+				 	$expression = [$token[$loop - 1], $value, $token[$loop + 1]];
+					logicalAnd($expression)
+				}
 			}
 		}
 	}
