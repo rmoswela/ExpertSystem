@@ -26,6 +26,20 @@ function callop($rule, $op)
     logigicalXor($rule);
 }
 
+function findop($rule)
+{
+  if (strpos($rule, '+'))
+    return ("and");
+  else if (strpos($rule, '!'))
+    return ("not");
+  else if(strpos($rule, '^'))
+    return ("xor");
+  else if (strpos($rule, '|'))
+    return ("or");
+  else
+    return ("");
+}
+
 function isexpression($rule)
 {
   if (strpos($rule, '+') || strpos($rule, '!') || strpos($rule, '^') || strpos($rule, '!'))
@@ -45,7 +59,6 @@ function evaluate($rule)
       {
         $rule = $subgoal[0];
         $result = evaluate($rule);
-        //?????????
         $subgoal[1] = $result.' + '.$subgoal[1];
         $result = evaluate($subgoal[1]);
       }
@@ -59,7 +72,6 @@ function evaluate($rule)
         {
           $rule = $subgoal[0];
           $result = evaluate($rule);
-          //?????????
           $subgoal[1] = $result.' | '.$subgoal[1];
           $result = evaluate($subgoal[1]);
         }
@@ -74,7 +86,6 @@ function evaluate($rule)
         {
           $rule = $subgoal[0];
           $result = evaluate($rule);
-          //?????????
           $subgoal[1] = $result.' ^ '.$subgoal[1];
           $result = evaluate($subgoal[1]);
         }
