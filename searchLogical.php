@@ -2,6 +2,7 @@
 
 function searchLogical($exp)
 {
+	//array of rules of precedence
 	$order = array(
 		"(" => 0,
 		"!" => 1,
@@ -25,7 +26,7 @@ function searchLogical($exp)
 		{
 			if ($key == $token[$loop])
 			{
-				return $value;
+				 $expression = [$token[$loop - 1], $value, $token[$loop + 1]];
 			}
 		}
 	}
