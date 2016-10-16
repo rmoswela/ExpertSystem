@@ -20,7 +20,6 @@ function searchLogical($exp)
 
 	foreach($order as $key => $value)
 	{
-		//initial loop control variable
 		$loop = 0;
 		//loop to check equality of key and token
 		while ($loop < $result)
