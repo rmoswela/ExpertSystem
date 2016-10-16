@@ -130,6 +130,16 @@ class KnowledgeBase
             return false;
     }
 
+    public function isInferred($variable)
+    {
+        foreach ($this->_rule as $key => $value) {
+            if ($value->__get('right') === $variable)
+            {
+                return $value->__get('left');
+            }
+        }
+    }
+    
     public function addFact($fact)
     {
         array_push($this->_proven_facts, $fact);
