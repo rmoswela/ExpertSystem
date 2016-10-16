@@ -48,8 +48,10 @@ class KnowledgeBase
     private function GetRules($data)
     {
         $rules = array();
+        $count = 0;
         foreach ($data as $line)
         {
+            $count++;
             if ($line[0] != "=" && $line[0] != "?")
             {
                 $op = "";
@@ -59,6 +61,13 @@ class KnowledgeBase
                     $op = "=>";
                 if ($op == "<=>" || $op == "=>")
                 {
+                    //Validate reules before adding them to the list
+                    /*if (!isValid($line[0]) || !isValid($line[1]))
+                    {
+                        print("Rule parse error at line $count".PHP_EOL);
+                    }*/
+
+                    //Explode and Add this validated rule to the list
                     $rule = explode($op, trim($line));
                     array_push($rules, new Rule($rule[0], $op, $rule[1]));
                 }
@@ -139,10 +148,15 @@ class KnowledgeBase
             }
         }
     }
-    
+
     public function addFact($fact)
     {
         array_push($this->_proven_facts, $fact);
+    }
+
+    public function getProvenFacts()
+    {
+        return ($this->_proven_facts);
     }
 }
 
