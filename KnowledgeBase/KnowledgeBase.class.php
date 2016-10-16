@@ -61,13 +61,6 @@ class KnowledgeBase
                     $op = "=>";
                 if ($op == "<=>" || $op == "=>")
                 {
-                    //Validate reules before adding them to the list
-                    /*if (!isValid($line[0]) || !isValid($line[1]))
-                    {
-                        print("Rule parse error at line $count".PHP_EOL);
-                    }*/
-
-                    //Explode and Add this validated rule to the list
                     $rule = explode($op, trim($line));
                     array_push($rules, new Rule($rule[0], $op, $rule[1]));
                 }
