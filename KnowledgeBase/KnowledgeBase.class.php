@@ -153,11 +153,6 @@ class KnowledgeBase
     {
         array_push($this->_proven_facts, $fact);
     }
-
-    public function getProvenFacts()
-    {
-        return ($this->_proven_facts);
-    }
 }
 
 ?>
