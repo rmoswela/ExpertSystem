@@ -78,32 +78,29 @@ class KnowledgeBase
 
     private function validateRule($rule, $count, $op)
     {
-        $operator = array(0=>'+', 1=>'|', 2=>'^', 3=>'!');
-        if ($op === "<=>")
+        $p1 = '/(^(!)?([A-Z]){1}((\+|\^\|){1}(([A-Z]){1}))?$)'
+             .'|(^(!?[A-Z])(\+|\^\|){1}(!?[A-Z]){1}$)'
+             .'|(^((\()(\!)?([A-Z]{1})(\+|\^|\|)(\!)?([A-Z]{1})(\)))$)'
+             .'|(^((\()(\!)?([A-Z]{1})(\+|\^|\|)(\!)?([A-Z]{1})(\)))(((\+|\^|\|){1})([A-Z]){1})$)'
+             .'|(^((\!)?([A-Z]){1}((\+|\^|\|){1}))((\()(\!)?([A-Z]{1})(\+|\^|\|)(\!)?([A-Z]{1})(\)))$)/';
+        
+        $trimed_rule = preg_replace('/\s/','',$rule);
+
+        $rule_arr = explode($op, $trimed_rule);
+
+        $r1 = preg_match($p1, $rule_arr[0]);  //For A + B
+        $r2 = preg_match($p1, $rule_arr[1]);   //For 
+        
+
+        if ($r2 && $r1)
         {
-            $rule = preg_replace('/s/','',$rule);
-            for ($i = 0; $i < strlen($rule); $i++)
-            {
-                $item = $rule[$i];
-                if ($item >= 'A' && $item <= 'Z')
-                {
-                    $i++;
-                    $item = $rule[$i];
-                    //Check for operator
-                    if (in_array($item,$operator))
-                    {
-
-                    }
-                }
-            }
+            //echo "Valid ".$rule_arr[0]." $op "."$rule_arr[1]".PHP_EOL;
+            return (1);
         }
-        elseif ($op === "=>")
-        {
-
+        else{
+            echo "Invalid rule defination '".$rule_arr[0]." $op "."$rule_arr[1]' on line $count".PHP_EOL;
+            exit();
         }
-        echo "Parse error on line $count" . PHP_EOL;
-        exit();
-
     }
 
     private function GetFacts($data)
@@ -115,13 +112,22 @@ class KnowledgeBase
             $count++;
             if ($line[0] == "=")
             {
-                $line = trim(explode("=", trim($line))[1]);
+
+                $line = trim(explode("=", trim($line)));
+                if (!preg_match('/^(=)([A-Z])$/', $line[1]))
+                {
+                    echo "Invalid defination of facts on line $count".PHP_EOL;
+                }
+                else
+                {
+                    echo PHP_EOL."Workign ".PHP_EOL;
+                }
                 $vars = strlen($line);
                 for ($i = 0; $i < $vars; $i++)
                 {
                     if (preg_match('/[A-Z]+/', $line[$i]) == false)
                     {
-                        echo "Parse error on facts, line $count".PHP_EOL;
+                        echo "Invalid defination of facts on line $count".PHP_EOL;
                         exit();
                     }
                     array_push($facts, new Fact($line[$i], true));
@@ -134,14 +140,23 @@ class KnowledgeBase
     private function GetQueries($data)
     {
         $queries = array();
+        $count = 0;
         foreach ($data as $line)
         {
+            $count++;
             if ($line[0] == "?")
             {
                 $line = trim(explode("?", trim($line))[1]);
                 $vars = strlen($line);
                 for ($i = 0; $i < $vars; $i++)
-                    array_push($queries, new Query($line[$i]));
+                {
+                    if (preg_match('/[A-Z]+/', $line[$i]) == false)
+                    {
+                        echo "Invalid defination of queries on line $count".PHP_EOL;
+                        exit();
+                    }
+                    array_push($queries, new Query($line[$i], true));
+                }
             }
         }
         return $queries;
@@ -187,17 +202,6 @@ class KnowledgeBase
             return $this->_queries;
         else
             return false;
-    }
-
-    public function getQuery($var)
-    {
-        foreach ($this->_queries as $query) {
-            
-            if ($query->__get('variable') === $var) 
-            {
-                return ($query);
-            }
-        }
     }
 
     public function isInferred($variable)
