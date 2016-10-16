@@ -29,4 +29,8 @@ function __toString():
     E.g.
         $query = new Query("A"); // Creating a new Query instance
         echo $query; // This will display 'A is undetermined' or the true answer for 'A' if it has been found
+
+function getQuery($var)
+    This function takes a variable between A-Z, searches for that variable in a list of variables and return
+    its parent object.
 <======================================================================================================================>

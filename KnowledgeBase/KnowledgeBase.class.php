@@ -139,6 +139,17 @@ class KnowledgeBase
             return false;
     }
 
+    public function getQuery($var)
+    {
+        foreach ($this->_queries as $query) {
+            
+            if ($query->__get('variable') === $var) 
+            {
+                return ($query);
+            }
+        }
+    }
+
     public function isInferred($variable)
     {
         foreach ($this->_rule as $key => $value) {
