@@ -49,18 +49,25 @@ class KnowledgeBase
     {
         $rules = array();
         $count = 0;
+        $op = "";
         foreach ($data as $line)
         {
             $count++;
             if ($line[0] != "=" && $line[0] != "?")
             {
-                $op = "";
                 if (strpos($line, "<=>") != false)
+                {
                     $op = "<=>";
+                    $this->validateRule($line, $count, $op);
+                }
                 else if (strpos($line, "=>") != false)
+                {
                     $op = "=>";
+                    $this->validateRule($line, $count, $op);
+                }
                 if ($op == "<=>" || $op == "=>")
                 {
+                    //
                     $rule = explode($op, trim($line));
                     array_push($rules, new Rule($rule[0], $op, $rule[1]));
                 }
@@ -69,17 +76,56 @@ class KnowledgeBase
         return $rules;
     }
 
+    private function validateRule($rule, $count, $op)
+    {
+        $operator = array(0=>'+', 1=>'|', 2=>'^', 3=>'!');
+        if ($op === "<=>")
+        {
+            $rule = preg_replace('/s/','',$rule);
+            for ($i = 0; $i < strlen($rule); $i++)
+            {
+                $item = $rule[$i];
+                if ($item >= 'A' && $item <= 'Z')
+                {
+                    $i++;
+                    $item = $rule[$i];
+                    //Check for operator
+                    if (in_array($item,$operator))
+                    {
+
+                    }
+                }
+            }
+        }
+        elseif ($op === "=>")
+        {
+
+        }
+        echo "Parse error on line $count" . PHP_EOL;
+        exit();
+
+    }
+
     private function GetFacts($data)
     {
         $facts = array();
+        $count = 0;
         foreach ($data as $line)
         {
+            $count++;
             if ($line[0] == "=")
             {
                 $line = trim(explode("=", trim($line))[1]);
                 $vars = strlen($line);
                 for ($i = 0; $i < $vars; $i++)
+                {
+                    if (preg_match('/[A-Z]+/', $line[$i]) == false)
+                    {
+                        echo "Parse error on facts, line $count".PHP_EOL;
+                        exit();
+                    }
                     array_push($facts, new Fact($line[$i], true));
+                }
             }
         }
         return $facts;
@@ -118,6 +164,17 @@ class KnowledgeBase
         return $output;
     }
 
+    public function getQuery($var)
+    {
+        foreach ($this->_queries as $query) {
+            
+            if ($query->__get('variable') === $var) 
+            {
+                return ($query);
+            }
+        }
+    }
+    
     public function __get($name)
     {
         if ($name == "rules")
@@ -145,10 +202,11 @@ class KnowledgeBase
 
     public function isInferred($variable)
     {
-        foreach ($this->_rule as $key => $value) {
-            if ($value->__get('right') === $variable)
+        foreach ($this->_rules as $rule)
+        {
+            if ($variable === $rule->__get("right"))
             {
-                return $value->__get('left');
+                return ($rule->__get("left"));
             }
         }
     }
