@@ -6,13 +6,13 @@ require_once ("Query.class.php");
 
 class KnowledgeBase
 {
-    private $_rules;
-    private $_initial_facts;
-    private $_proven_facts;
-    private $_queries;
+    private $_rules = [];
+    private $_initial_facts = [];
+    private $_proven_facts = [];
+    private $_queries = [];
 
     public function __construct($filename)
-    {
+	{
         if (file_exists($filename) == true)
         {
             $data = $this->GetData($filename);
@@ -32,7 +32,7 @@ class KnowledgeBase
     {
         $contents = file_get_contents($filename);
         $contents = explode("\n", trim($contents));
-        $data = array();
+		$data = array();
         foreach ($contents as $line)
         {
             if ($line[0] != "#")
