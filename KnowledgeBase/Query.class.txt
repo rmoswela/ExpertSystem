@@ -1,0 +1,36 @@
+<=================================================== Query Class =======================================================>
+Summary:
+    The Query class is suppose to represent a query in the knowledge base. It stores the variable's name and it's
+    answer.
+
+    E.g.For fact    =   '?A'
+        variable    =   'A'
+        answer      =   'undetermined' (This is the default value)
+
+Creating a Fact object -------------------------------------------------------------------------------------------------
+    E.g.
+        $query = new Query('A');
+
+methods ----------------------------------------------------------------------------------------------------------------
+function __get($name):
+    This function will return the variable or the answer depending on the argument passed.
+    E.g.
+        $obj->__get("variable"); // This will return the variable
+        $obj->__get("answer"); // This will return the answer
+
+function __set($name, $value):
+    This function will set the value of the variable or answer depending on the arguments passed.
+    E.g.
+        $obj->__set("variable", "A"); // This will set the variable to 'A'
+        $obj->__set("answer", true); // This will set the answer to true
+
+function __toString():
+    This function will return the string representation of the Query instance.
+    E.g.
+        $query = new Query("A"); // Creating a new Query instance
+        echo $query; // This will display 'A is undetermined' or the true answer for 'A' if it has been found
+
+function getQuery($var)
+    This function takes a variable between A-Z, searches for that variable in a list of variables and return
+    its parent object.
+<======================================================================================================================>
