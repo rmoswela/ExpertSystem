@@ -89,12 +89,11 @@ class KnowledgeBase
         $rule_arr = explode($op, $trimed_rule);
 
         $r1 = preg_match($p1, $rule_arr[0]);  //For A + B
-        $r2 = preg_match($p1, $rule_arr[1]);   //For 
+        $r2 = preg_match($p1, $rule_arr[1]);   //For implied side
         
 
         if ($r2 && $r1)
         {
-            //echo "Valid ".$rule_arr[0]." $op "."$rule_arr[1]".PHP_EOL;
             return (1);
         }
         else{
@@ -113,14 +112,11 @@ class KnowledgeBase
             if ($line[0] == "=")
             {
 
-                $line = trim(explode("=", trim($line)));
-                if (!preg_match('/^(=)([A-Z])$/', $line[1]))
+                $line = trim(explode("=", trim($line))[1]);
+                if (!preg_match('/^([A-Z])+$/', $line))
                 {
                     echo "Invalid defination of facts on line $count".PHP_EOL;
-                }
-                else
-                {
-                    echo PHP_EOL."Workign ".PHP_EOL;
+                    exit();
                 }
                 $vars = strlen($line);
                 for ($i = 0; $i < $vars; $i++)
@@ -147,14 +143,14 @@ class KnowledgeBase
             if ($line[0] == "?")
             {
                 $line = trim(explode("?", trim($line))[1]);
+                if (!preg_match('/^([A-Z])+$/', $line))
+                {
+                    echo "Invalid defination of queries on line $count".PHP_EOL;
+                    exit();
+                }
                 $vars = strlen($line);
                 for ($i = 0; $i < $vars; $i++)
                 {
-                    if (preg_match('/[A-Z]+/', $line[$i]) == false)
-                    {
-                        echo "Invalid defination of queries on line $count".PHP_EOL;
-                        exit();
-                    }
                     array_push($queries, new Query($line[$i], true));
                 }
             }
