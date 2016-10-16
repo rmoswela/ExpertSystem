@@ -23,9 +23,8 @@ class KnowledgeBase
         }
         else
         {
-            $this->_rules = array();
-            $this->_initial_facts = array();
-            $this->_queries = array();
+			echo "Error: file does not exist".PHP_EOL;
+			exit();
         }
     }
 
