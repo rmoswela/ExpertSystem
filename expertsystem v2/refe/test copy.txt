@@ -1,0 +1,3 @@
+
+			# If no facts are initially true, then a simple "=" followed
+			# by a newline is used
